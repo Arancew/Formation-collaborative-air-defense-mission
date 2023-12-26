@@ -1,7 +1,6 @@
 import random
-from config import config
-random.seed(config['seed'])
 
+random.seed(2023)
 
 class Our_combat_unit:
     def __init__(self,enemy_nums):

@@ -62,6 +62,22 @@ def update(Our_combat:list,Enemy_combat:list,out_lst,enemy_lst,flag1=1,flag2=1):
     pre_Our_combat=deepcopy(Our_combat)
     pre_Enemy_combat=deepcopy(Enemy_combat)
 
+
+
+    # 更新敌方作战单元
+    if flag2==1:
+        for i in range(len(pre_Enemy_combat)):
+            tmp = []
+            # 找到要攻击i的我方作战单元
+            our= []
+            for j,val in enumerate(out_lst):
+                if pre_Our_combat[j].rK==0:
+                    continue
+                if val[i] == 1:
+                    our.append(j)
+            for j in our:
+                tmp.append(pre_Our_combat[j].pR[i])
+            Enemy_combat[i].bK =pre_Enemy_combat[i].bK * check(tmp)
     # 更新我方作战单元
     if flag1==1:
         for j in range(len(pre_Our_combat)):
@@ -78,20 +94,6 @@ def update(Our_combat:list,Enemy_combat:list,out_lst,enemy_lst,flag1=1,flag2=1):
 
             Our_combat[j].rK=pre_Our_combat[j].rK*check(tmp)
 
-    # 更新敌方作战单元
-    if flag2==1:
-        for i in range(len(pre_Enemy_combat)):
-            tmp = []
-            # 找到要攻击i的我方作战单元
-            our= []
-            for j,val in enumerate(out_lst):
-                if pre_Our_combat[j].rK==0:
-                    continue
-                if val[i] == 1:
-                    our.append(j)
-            for j in our:
-                tmp.append(pre_Our_combat[j].pR[i])
-            Enemy_combat[i].bK =pre_Enemy_combat[i].bK * check(tmp)
 
 if __name__=='__main__':
     Our_combat, Enemy_combat = get_data(10, 10)

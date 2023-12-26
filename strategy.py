@@ -99,6 +99,74 @@ def Formation_optimization_stratery_enemy(Our_combat,Enemy_combat):
         enemy_lst[i][lst[i]] = 1
     return enemy_lst
 
+
+def equilibrium_Our(Our_combat,Enemy_combat):
+
+    max_score=-10000
+    max_lst=None
+    import itertools
+    # 定义一个包含0-n的列表
+    numbers = list(range(len(Our_combat)))
+    oug_lst=Formation_optimization_stratery_our(Our_combat, Enemy_combat)
+    # print(numbers)
+    for i in itertools.product(numbers, repeat=len(Our_combat)):
+        lst=list(i)
+        out_lst = [[0 for _ in range(len(Enemy_combat))] for _ in range(len(Our_combat))]
+        for i in range(len(lst)):
+            out_lst[i][lst[i]]=1
+
+        #k=0
+        Our_combat0 = deepcopy(Our_combat)
+        Enemy_combat0 = deepcopy(Enemy_combat)
+        enemy_lst_0 = Formation_optimization_stratery_enemy(Our_combat0, Enemy_combat0)
+
+        update(Our_combat0,Enemy_combat0,out_lst,enemy_lst_0,1,1)
+
+        #k=1
+        our_lst_0 = Formation_optimization_stratery_our(Our_combat0, Enemy_combat0)
+        update(Our_combat0,Enemy_combat0,our_lst_0,[],0,1)
+        our_score,_=get_target_score(Our_combat0,Enemy_combat0)
+        if our_score>=max_score:
+            max_score=our_score
+            max_lst=lst
+    lst = max_lst
+    # print(lst)
+    out_lst = [[0 for _ in range(len(Enemy_combat))] for _ in range(len(Our_combat))]
+    for i in range(len(lst)):
+        out_lst[i][lst[i]] = 1
+    return oug_lst
+def equilibrium_Enemy(Our_combat,Enemy_combat):
+    max_score = -10000
+    max_lst = None
+    import itertools
+    # 定义一个包含0-n的列表
+    numbers = list(range(len(Our_combat)))
+    enemg_lst=Formation_optimization_stratery_enemy(Our_combat, Enemy_combat)
+    # print(numbers)
+    for i in itertools.product(numbers, repeat=len(Our_combat)):
+        lst = list(i)
+        enemy_lst = [[0 for _ in range(len(Our_combat))] for _ in range(len(Enemy_combat))]
+        for i in range(len(lst)):
+            enemy_lst[i][lst[i]] = 1
+        # k=0
+        Our_combat0 = deepcopy(Our_combat)
+        Enemy_combat0 = deepcopy(Enemy_combat)
+        our_lst_0 = Formation_optimization_stratery_our(Our_combat0, Enemy_combat0)
+        update(Our_combat0, Enemy_combat0, our_lst_0, enemy_lst, 1, 1)
+
+        # k=1
+        enemy_lst_0 = Formation_optimization_stratery_enemy(Our_combat0, Enemy_combat0)
+        update(Our_combat0, Enemy_combat0, [], enemy_lst_0, 1, 0)
+        enemy_score, _ = get_target_score(Our_combat0, Enemy_combat0)
+
+        if enemy_score >= max_score:
+            max_score = enemy_score
+            max_lst = lst
+    lst = max_lst
+    enemy_lst = [[0 for _ in range(len(Our_combat))] for _ in range(len(Enemy_combat))]
+    for i in range(len(lst)):
+        enemy_lst[i][lst[i]] = 1
+    return enemg_lst
 if __name__=="__main__":
     import itertools
 
